@@ -62,7 +62,7 @@ class ParallelCommand extends Command
             ->addOption(
                 self::SUITE_FILTER,
                 's',
-                InputOption::VALUE_NONE,
+                InputOption::VALUE_REQUIRED,
                 'Add Suite Filter in xml file'
             )
             ->addOption(
@@ -99,7 +99,7 @@ class ParallelCommand extends Command
             throw new \Exception(sprintf('%s should have a scalar (string) or null value', self::XML_OPTION));
         }
 
-        $testSuiteFilter = $input->getOption(self::SUITE_OPTION);
+        $testSuiteFilter = $input->getOption(self::SUITE_FILTER);
         if (!is_String($testSuiteFilter) && null !== $testSuiteFilter) {
             throw new \Exception(sprintf('%s should have a scalar (string) or null value', self::SIUITE_OPTION));
         }
