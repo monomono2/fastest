@@ -4,13 +4,13 @@ namespace Liuggio\Fastest\Queue;
 
 class CreateTestsQueueFromPhpUnitXML
 {
-    public static function execute(string $xmlFile): TestsQueue
+    public static function execute(string $xmlFile, string $testSuiteFilter = ''): TestsQueue
     {
         $configuration = \PHPUnit\Util\Configuration::getInstance($xmlFile);
         $testSuites = new TestsQueue();
 
         self::handleBootstrap($configuration->getPHPUnitConfiguration());
-        self::processTestSuite($testSuites, $configuration->getTestSuiteConfiguration()->getIterator());
+        self::processTestSuite($testSuites, $configuration->getTestSuiteConfiguration($testSuiteFilter)->getIterator());
 
         return $testSuites;
     }

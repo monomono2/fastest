@@ -26,6 +26,7 @@ class ParallelCommand extends Command
     private const PROCESS_OPTION = 'process';
     private const BEFORE_OPTION = 'before';
     private const XML_OPTION = 'xml';
+    private const SUITE_FILTER = 'suite';
     private const PRESERVE_ORDER_OPTION = 'preserve-order';
     private const RERUN_FAILED_OPTION = 'rerun-failed';
     private const NO_ERRORS_SUMMARY_OPTION = 'no-errors-summary';
@@ -57,6 +58,12 @@ class ParallelCommand extends Command
                 'x',
                 InputOption::VALUE_REQUIRED,
                 'Read input from a phpunit xml file from the \'<testsuites>\' collection. Note: it is not used for consuming.'
+            )
+            ->addOption(
+                self::SUITE_FILTER,
+                's',
+                InputOption::VALUE_NONE,
+                'Add Suite Filter in xml file'
             )
             ->addOption(
                 self::PRESERVE_ORDER_OPTION,
@@ -92,13 +99,18 @@ class ParallelCommand extends Command
             throw new \Exception(sprintf('%s should have a scalar (string) or null value', self::XML_OPTION));
         }
 
+        $testSuiteFilter = $input->getOption(self::SUITE_OPTION);
+        if (!is_String($testSuiteFilter) && null !== $testSuiteFilter) {
+            throw new \Exception(sprintf('%s should have a scalar (string) or null value', self::SIUITE_OPTION));
+        }
+
         $preserveOrderOption = $input->getOption(self::PRESERVE_ORDER_OPTION);
         if (!is_bool($preserveOrderOption) && null !== $preserveOrderOption) {
             throw new \Exception(sprintf('%s should not have any value', self::PRESERVE_ORDER_OPTION));
         }
         $preserveOrderOption = (bool) $preserveOrderOption;
 
-        $queue = $readFromInputAndPushIntoTheQueue->execute($xmlOption, $preserveOrderOption);
+        $queue = $readFromInputAndPushIntoTheQueue->execute($xmlOption, $testSuiteFilter, $preserveOrderOption);
 
         $processOption = $input->getOption(self::PROCESS_OPTION);
         if ((!is_numeric($processOption) || !is_int((int) $processOption)) && null !== $processOption) {

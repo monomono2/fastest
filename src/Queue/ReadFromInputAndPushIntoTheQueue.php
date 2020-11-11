@@ -19,10 +19,10 @@ class ReadFromInputAndPushIntoTheQueue
         $this->queueFactory = $queueFactory;
     }
 
-    public function execute(string $xmlFile = null, bool $preserveOrder = false): QueueInterface
+    public function execute(string $xmlFile = null, string $testSuiteFilter = '', bool $preserveOrder = false): QueueInterface
     {
         if (null !== $xmlFile) {
-            $testsQueue = CreateTestsQueueFromPhpUnitXML::execute($xmlFile);
+            $testsQueue = CreateTestsQueueFromPhpUnitXML::execute($xmlFile, $testSuiteFilter);
         } else {
             $readFromPipe = new CreateTestsQueueFromSTDIN();
             $testsQueue = $readFromPipe->execute();
